@@ -1,3 +1,5 @@
+import { AccessRight } from "../Shared/Model";
+
 export interface Account {
 	username: string;
 	password: string;
@@ -8,7 +10,11 @@ export interface Handler {
 }
 
 export interface sessionToken {
-	tokenId: string;
+	tokenId: string,
+	username: string,
+	valid: boolean,
+	expirationTime: Date,
+	accessRights: AccessRight[]
 }
 
 export interface TokenGenerator {

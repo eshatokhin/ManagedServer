@@ -1,5 +1,7 @@
 import { UserCredentials } from "../Shared/Model";
 import * as Nedb from 'nedb';
+import { resolve } from "path";
+import { rejects } from "assert";
 
 export class UserCredentialsDBAccess {
 
@@ -12,7 +14,7 @@ export class UserCredentialsDBAccess {
 
 	public async putUserCredential(userCredentials: UserCredentials): Promise<any> {
 		return new Promise((resolve, reject) => {
-			this.nedb.insert(userCredentials, (err: Error, docs: any) => {
+			this.nedb.insert(userCredentials, (err, docs: any) => {
 				if (err) {
 					reject(err);
 				} else {
@@ -22,7 +24,20 @@ export class UserCredentialsDBAccess {
 		});
 	}
 
-	public async getUserCredential(userName: string, password: string): Promise<UserCredentials | undefined> {
-		throw "";
+	public async getUserCredential(username: string, password: string): Promise<UserCredentials | undefined> {
+		return new Promise((resolve, reject) => {
+			this.nedb.find({username: username, password: password},
+				(err: Error, docs: UserCredentials[])=>{
+					if (err) {
+						reject(err);
+					} else {
+						if (docs.length == 0 ) {
+							resolve(undefined);
+						} else {
+							resolve(docs[0]);
+						}
+					}
+				});
+		})
 	}
 }
