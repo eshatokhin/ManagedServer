@@ -1,6 +1,7 @@
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { Authorizer } from '../Authorization/Authorizer';
 import { LoginHandler } from './LoginHandler';
+import { UsersHandler } from './UsersHandler';
 import { Utils } from './Utils';
 
 export class Server {
@@ -16,7 +17,10 @@ export class Server {
 				switch(basePath)
 				{
 					case "login":
-						await new LoginHandler(req, res, this.authorizer).handleRequest()
+						await new LoginHandler(req, res, this.authorizer).handleRequest();
+						break;
+					case "users":
+						await new UsersHandler(req, res).handleRequest();
 						break;
 					default:
 						break;
