@@ -3,9 +3,10 @@ Content-Type: application/json
 
 {
 	"username": "user",
-	"password": "password1"
+	"password": "password"
 }
 
 ###
 
-GET http://localhost:8080/users?id=123
+GET http://localhost:8080/users?id=someId
+Authorization: lxit8jibrih

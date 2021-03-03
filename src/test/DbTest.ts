@@ -11,7 +11,7 @@ class DbTest {
 
 // new DbTest().dbAccess.putUserCredential({
 // 	username: 'user',
-// 	password: 'password1',
+// 	password: 'password',
 // 	accessRights: [1, 2, 3]
 // })
 
@@ -22,3 +22,5 @@ new DbTest().userDbAccess.putUser({
 	name: 'SomeName',
 	workingPosition: workingPosition.ENGINEER
 })
+
+//console.log(new DbTest().userDbAccess.getUserById("someId"));
