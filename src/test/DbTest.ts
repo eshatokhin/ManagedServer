@@ -9,11 +9,11 @@ class DbTest {
 	public userDbAccess: UsersDBAccess = new UsersDBAccess();
 }
 
-// new DbTest().dbAccess.putUserCredential({
-// 	username: 'user',
-// 	password: 'password',
-// 	accessRights: [1, 2, 3]
-// })
+new DbTest().dbAccess.putUserCredential({
+	username: 'user',
+	password: 'password',
+	accessRights: [0, 1, 2, 3]
+})
 
 new DbTest().userDbAccess.putUser({
 	age: 30,

@@ -37,6 +37,12 @@ export abstract class BaseRequestHandler {
 		console.log(message);
 	}
 
+	protected respondText(httpCode: HTTP_CODES, message: string) {
+		this.res.statusCode = httpCode;
+		this.res.write(message);
+		console.log(message);
+	}
+
 	protected async getRequestBody(): Promise<any> {
 		return new Promise((resolve, reject) => {
 			let body = "";

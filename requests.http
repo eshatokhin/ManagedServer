@@ -5,8 +5,26 @@ Content-Type: application/json
 	"username": "user",
 	"password": "password"
 }
+###
+DELETE http://localhost:8080/users?id=fha7ltt1irh
+Authorization: suqjsqr2yfs
 
 ###
-
 GET http://localhost:8080/users?id=someId
-Authorization: lxit8jibrih
+Authorization: llco30c2q5
+
+###
+GET http://localhost:8080/users?name=John
+Authorization: llco30c2q5
+
+###
+PUT http://localhost:8080/users
+Authorization: llco30c2q5
+Content-Type: application/json
+
+{
+	"age": 30,
+	"email": "some@email.com",
+	"name": "SomeName",
+	"workingPosition": 3
+}

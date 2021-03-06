@@ -31,7 +31,6 @@ export class LoginHandler extends BaseRequestHandler{
 				this.res.statusCode = HTTP_CODES.CREATED;
 				this.res.writeHead(HTTP_CODES.CREATED, {'Content-Type': 'application/JSON'});
 				this.res.write(JSON.stringify(sessionToken));
-
 				console.log(JSON.stringify(sessionToken));
 			} else {
 				this.res.statusCode = HTTP_CODES.NOT_FOUND;

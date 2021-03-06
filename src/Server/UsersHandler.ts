@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse, STATUS_CODES } from "http";
-import { AccessRight, HTTP_CODES, HTTP_METHODS } from "../Shared/Model";
+import { AccessRight, HTTP_CODES, HTTP_METHODS, User } from "../Shared/Model";
 import { UsersDBAccess } from "../User/UsersDBAccess";
 import { BaseRequestHandler } from "./BaseRequestHandler";
 import { TokenValidator } from "./Model";
@@ -20,9 +20,51 @@ export class UsersHandler extends BaseRequestHandler {
 			case HTTP_METHODS.GET:
 				await this.handleGet();
 				break;
+			case HTTP_METHODS.PUT:
+				await this.handlePut();
+				break;
+			case HTTP_METHODS.DELETE:
+				await this.handleDelete();
+				break;
 			default:
 				await this.handleNotFound();
 				break;
+		}
+	}
+
+	private async handleDelete() {
+		const operationAuthorized = await this.operationAuthorized(AccessRight.DELETE);
+		if (operationAuthorized) {
+			const parsedUrl = Utils.getUrlParameters(this.req.url);
+			if (parsedUrl) {
+				if (parsedUrl.query.id) {
+					const deleteResult = await this.usersDBAccess.deleteUser(parsedUrl.query.id as string);
+					if (deleteResult)
+					{
+						this.respondText(HTTP_CODES.OK, `user ${parsedUrl.query.id} successfuly deleted from database`);
+					} else {
+						this.respondText(HTTP_CODES.NOT_FOUND, `user ${parsedUrl.query.id} was not deleted from database`);
+					}
+				} else {
+					this.respondBadRequest('missing id in the request');
+				}
+			}
+		}
+	}
+
+	private async handlePut() {
+		const operationAuthorized = await this.operationAuthorized(AccessRight.CREATE);
+		if (operationAuthorized) {
+			try {
+				const user: User = await this.getRequestBody();
+				this.usersDBAccess.putUser(user);
+				this.respondText(HTTP_CODES.CREATED, `user ${user.name} created`);
+			} catch (error) {
+				this.respondBadRequest(error.message);
+			}
+		}
+		else {
+			this.respondUnAuthorized("missing or invalid authentication");
 		}
 	}
 
@@ -31,9 +73,8 @@ export class UsersHandler extends BaseRequestHandler {
 		if (operationAuthorized) {
 			const parsedUrl = Utils.getUrlParameters(this.req.url);
 			if (parsedUrl) {
-				const userId = parsedUrl?.query.id;
-				if (userId) {
-					const user = await this.usersDBAccess.getUserById(userId as string);
+				if (parsedUrl.query.id) {
+					const user = await this.usersDBAccess.getUserById(parsedUrl.query.id as string);
 					if (user) {
 						this.respondJsonObject(HTTP_CODES.OK, user);
 						console.log(JSON.stringify(user))
@@ -41,8 +82,11 @@ export class UsersHandler extends BaseRequestHandler {
 						this.handleNotFound();
 						console.log("not found")
 					}
+				} else if (parsedUrl.query.name){
+					const users = await this.usersDBAccess.getUsersByName(parsedUrl.query.name as string);
+					this.respondJsonObject(HTTP_CODES.OK, users);
 				} else {
-					this.respondBadRequest("userId not present in request");
+					this.respondBadRequest("userId or name not present in request");
 				}
 			}
 		} else {
