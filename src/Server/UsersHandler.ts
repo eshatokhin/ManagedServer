@@ -17,6 +17,9 @@ export class UsersHandler extends BaseRequestHandler {
 
 	async handleRequest(): Promise<void> {
 		switch (this.req.method) {
+			case HTTP_METHODS.OPTIONS:
+				this.res.writeHead(HTTP_CODES.OK);
+				break;
 			case HTTP_METHODS.GET:
 				await this.handleGet();
 				break;
@@ -27,7 +30,7 @@ export class UsersHandler extends BaseRequestHandler {
 				await this.handleDelete();
 				break;
 			default:
-				await this.handleNotFound();
+				this.handleNotFound();
 				break;
 		}
 	}
@@ -39,8 +42,7 @@ export class UsersHandler extends BaseRequestHandler {
 			if (parsedUrl) {
 				if (parsedUrl.query.id) {
 					const deleteResult = await this.usersDBAccess.deleteUser(parsedUrl.query.id as string);
-					if (deleteResult)
-					{
+					if (deleteResult) {
 						this.respondText(HTTP_CODES.OK, `user ${parsedUrl.query.id} successfuly deleted from database`);
 					} else {
 						this.respondText(HTTP_CODES.NOT_FOUND, `user ${parsedUrl.query.id} was not deleted from database`);
@@ -57,7 +59,7 @@ export class UsersHandler extends BaseRequestHandler {
 		if (operationAuthorized) {
 			try {
 				const user: User = await this.getRequestBody();
-				this.usersDBAccess.putUser(user);
+				await this.usersDBAccess.putUser(user);
 				this.respondText(HTTP_CODES.CREATED, `user ${user.name} created`);
 			} catch (error) {
 				this.respondBadRequest(error.message);
@@ -82,7 +84,7 @@ export class UsersHandler extends BaseRequestHandler {
 						this.handleNotFound();
 						console.log("not found")
 					}
-				} else if (parsedUrl.query.name){
+				} else if (parsedUrl.query.name) {
 					const users = await this.usersDBAccess.getUsersByName(parsedUrl.query.name as string);
 					this.respondJsonObject(HTTP_CODES.OK, users);
 				} else {

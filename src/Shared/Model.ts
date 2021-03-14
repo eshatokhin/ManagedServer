@@ -8,7 +8,7 @@ export enum AccessRight {
 }
 
 export interface UserCredentials extends Account {
-	accessRights: AccessRight[];
+	accessRights: AccessRight[]
 }
 
 export enum HTTP_CODES {

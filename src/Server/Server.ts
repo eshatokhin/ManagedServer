@@ -11,7 +11,7 @@ export class Server {
 	public createServer() {
 		createServer(
 			async (req: IncomingMessage, res: ServerResponse) => {
-				console.log("got request from: " + req.url);
+				console.log(`got request from ${req.headers["user-agent"]} for ${req.url}`);
 				this.addCorsHeader(res);
 				const basePath = Utils.getUrlBasePath(req.url);
 
@@ -25,7 +25,7 @@ export class Server {
 					default:
 						break;
 				}
-				res.end;
+				res.end();
 			}
 		).listen(8080);
 		console.log("server started");
@@ -33,6 +33,7 @@ export class Server {
 
 	private addCorsHeader(res: ServerResponse) {
 		res.setHeader("Access-Control-Allow-Origin", "*");
+		res.setHeader('Access-Control-Allow-Methods', '*');
 		res.setHeader("Access-Control-Allow-Headers", "*");
 	}
 }

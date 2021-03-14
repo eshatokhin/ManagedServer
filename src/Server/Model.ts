@@ -1,8 +1,8 @@
 import { AccessRight } from "../Shared/Model";
 
 export interface Account {
-	username: string;
-	password: string;
+	username: string,
+	password: string
 }
 
 export interface sessionToken {
@@ -20,8 +20,8 @@ export enum TokenState {
 }
 
 export interface TokenRights {
-	accessRights: AccessRight[];
-	state: TokenState;
+	accessRights: AccessRight[],
+	state: TokenState
 }
 
 export interface TokenGenerator {
@@ -29,5 +29,5 @@ export interface TokenGenerator {
 }
 
 export interface TokenValidator {
-	validateToken(tokenId: string): Promise<TokenRights>;
+	validateToken(tokenId: string): Promise<TokenRights>
 }

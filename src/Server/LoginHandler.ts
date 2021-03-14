@@ -21,12 +21,13 @@ export class LoginHandler extends BaseRequestHandler{
 				this.res.writeHead(HTTP_CODES.OK);
 				break;
 			default:
-				await this.handleNotFound();
+				this.handleNotFound();
 				break;
 		}
 	}
 
 	private async handlePost(){
+		console.log('sessionToken');
 		try{
 			const body: Account = await this.getRequestBody();
 			const sessionToken = await this.tokenGenerator.generateToken(body);
