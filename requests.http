@@ -7,19 +7,19 @@ Content-Type: application/json
 }
 ###
 DELETE http://localhost:8080/users?id=fha7ltt1irh
-Authorization: suqjsqr2yfs
+Authorization: 8kzrid3qpso
 
 ###
 GET http://localhost:8080/users?id=someId
-Authorization: llco30c2q5
+Authorization: 8kzrid3qpso
 
 ###
 GET http://localhost:8080/users?name=John
-Authorization: llco30c2q5
+Authorization: 8kzrid3qpso
 
 ###
 PUT http://localhost:8080/users
-Authorization: llco30c2q5
+Authorization: 8kzrid3qpso
 Content-Type: application/json
 
 {
